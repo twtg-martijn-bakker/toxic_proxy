@@ -1,3 +1,4 @@
+from typing import Tuple
 import socket
 import toxic_proxy.sideeffects as sideeffects
 import asyncio
@@ -10,24 +11,13 @@ side_effects = {
     "bandwidth_rate_kb": sideeffects.bandwidth_rate_kb,
 }
 
+async def toxic_proxy(destination: Tuple(str, int),
+                      port: int,
+                      latency: int = None,
+                      timeout: int = None,
+                      bandwidth_rate_kb: int = None,
+                      slow_close = None):
 
-def random_port():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(("", 0))
-    s.listen(1)
-    port = s.getsockname()[1]
-    s.close()
-    return port
-
-
-async def toxic_proxy(destination,
-                      latency: int=None,
-                      timeout=None,
-                      bandwidth_rate_kb: int=None,
-                      slow_close=None,
-                      port: int=None):
-    if not port:
-        port = random_port()
     opts = dict(
         latency=latency,
         timeout=timeout,
